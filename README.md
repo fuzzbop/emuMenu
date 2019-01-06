@@ -1,4 +1,6 @@
 # emuMenu
+<img src="assets/emu_black_silhouette.svg/" height="150">
+
 emuMenu is a simple emulator launcher
 
 I Wanted a simple launcher without all the fluff for those of us with huge collections. I tried to write
