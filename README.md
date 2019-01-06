@@ -5,7 +5,7 @@ I Wanted a simple launcher without all the fluff for those of us with huge colle
 this with large collections in mind, but it is also the first thing I have written in a large number of 
 years. there will be bad practice and things in place and it is very much so a work in progress
 
-requirements are python, python-sqlite3, python-qt5
+requirements are python3, python3-sqlite3, python3-qt5
 
 TODO:
 * make this read-me better
