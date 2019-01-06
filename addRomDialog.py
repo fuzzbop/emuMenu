@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'addRomDialog.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.3
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_add_rom_dialog(object):
+    def setupUi(self, add_rom_dialog):
+        add_rom_dialog.setObjectName("add_rom_dialog")
+        add_rom_dialog.resize(728, 206)
+        self.gridLayout = QtWidgets.QGridLayout(add_rom_dialog)
+        self.gridLayout.setObjectName("gridLayout")
+        self.rom_add_button_box = QtWidgets.QDialogButtonBox(add_rom_dialog)
+        self.rom_add_button_box.setOrientation(QtCore.Qt.Horizontal)
+        self.rom_add_button_box.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.rom_add_button_box.setObjectName("rom_add_button_box")
+        self.gridLayout.addWidget(self.rom_add_button_box, 2, 0, 1, 1)
+        self.main_layout = QtWidgets.QVBoxLayout()
+        self.main_layout.setSpacing(5)
+        self.main_layout.setObjectName("main_layout")
+        self.console_layout = QtWidgets.QHBoxLayout()
+        self.console_layout.setSpacing(10)
+        self.console_layout.setObjectName("console_layout")
+        self.console_name_label = QtWidgets.QLabel(add_rom_dialog)
+        self.console_name_label.setMinimumSize(QtCore.QSize(150, 35))
+        self.console_name_label.setMaximumSize(QtCore.QSize(150, 35))
+        self.console_name_label.setFrameShape(QtWidgets.QFrame.Panel)
+        self.console_name_label.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.console_name_label.setObjectName("console_name_label")
+        self.console_layout.addWidget(self.console_name_label)
+        self.console_name_combo = QtWidgets.QComboBox(add_rom_dialog)
+        self.console_name_combo.setMinimumSize(QtCore.QSize(0, 35))
+        self.console_name_combo.setMaximumSize(QtCore.QSize(16777215, 35))
+        self.console_name_combo.setObjectName("console_name_combo")
+        self.console_layout.addWidget(self.console_name_combo)
+        self.main_layout.addLayout(self.console_layout)
+        self.directory_layout = QtWidgets.QHBoxLayout()
+        self.directory_layout.setSpacing(10)
+        self.directory_layout.setObjectName("directory_layout")
+        self.directory_label = QtWidgets.QLabel(add_rom_dialog)
+        self.directory_label.setMinimumSize(QtCore.QSize(150, 35))
+        self.directory_label.setMaximumSize(QtCore.QSize(150, 35))
+        self.directory_label.setFrameShape(QtWidgets.QFrame.Panel)
+        self.directory_label.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.directory_label.setObjectName("directory_label")
+        self.directory_layout.addWidget(self.directory_label)
+        self.directory_line_edit = QtWidgets.QLineEdit(add_rom_dialog)
+        self.directory_line_edit.setInputMask("")
+        self.directory_line_edit.setObjectName("directory_line_edit")
+        self.directory_layout.addWidget(self.directory_line_edit)
+        self.directory_button = QtWidgets.QPushButton(add_rom_dialog)
+        self.directory_button.setObjectName("directory_button")
+        self.directory_layout.addWidget(self.directory_button)
+        self.main_layout.addLayout(self.directory_layout)
+        self.extension_layout = QtWidgets.QHBoxLayout()
+        self.extension_layout.setSpacing(10)
+        self.extension_layout.setObjectName("extension_layout")
+        self.extension_label = QtWidgets.QLabel(add_rom_dialog)
+        self.extension_label.setMinimumSize(QtCore.QSize(150, 35))
+        self.extension_label.setMaximumSize(QtCore.QSize(150, 35))
+        self.extension_label.setFrameShape(QtWidgets.QFrame.Panel)
+        self.extension_label.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.extension_label.setObjectName("extension_label")
+        self.extension_layout.addWidget(self.extension_label)
+        self.extension_line_edit = QtWidgets.QLineEdit(add_rom_dialog)
+        self.extension_line_edit.setObjectName("extension_line_edit")
+        self.extension_layout.addWidget(self.extension_line_edit)
+        self.main_layout.addLayout(self.extension_layout)
+        self.gridLayout.addLayout(self.main_layout, 1, 0, 1, 1)
+        self.description_label = QtWidgets.QLabel(add_rom_dialog)
+        self.description_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.description_label.setObjectName("description_label")
+        self.gridLayout.addWidget(self.description_label, 0, 0, 1, 1)
+
+        self.retranslateUi(add_rom_dialog)
+        self.rom_add_button_box.accepted.connect(add_rom_dialog.accept)
+        self.rom_add_button_box.rejected.connect(add_rom_dialog.reject)
+        QtCore.QMetaObject.connectSlotsByName(add_rom_dialog)
+
+    def retranslateUi(self, add_rom_dialog):
+        _translate = QtCore.QCoreApplication.translate
+        add_rom_dialog.setWindowTitle(_translate("add_rom_dialog", "Add Roms From Directory"))
+        self.console_name_label.setText(_translate("add_rom_dialog", "Console Name: "))
+        self.directory_label.setText(_translate("add_rom_dialog", "Directory :"))
+        self.directory_button.setText(_translate("add_rom_dialog", "Open"))
+        self.extension_label.setText(_translate("add_rom_dialog", "Extension :"))
+        self.description_label.setText(_translate("add_rom_dialog", "Add Roms from directory chosen."))
+
