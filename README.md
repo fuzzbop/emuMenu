@@ -3,9 +3,9 @@
 
 emuMenu is a simple emulator launcher
 
-I Wanted a simple launcher without all the fluff for those of us with huge collections. I tried to write
+I wanted a simple launcher without all the fluff for those of us with huge collections. I tried to write
 this with large collections in mind, but it is also the first thing I have written in a large number of 
-years. there will be bad practice and things in place and it is very much so a work in progress
+years. There may be bad practice and things in place and it is very much so a work in progress.
 
 requirements are python3, python3-sqlite3, python3-qt5
 
