@@ -21,6 +21,8 @@ import emuMenuMainWindow
 import addConsoleDialog
 import addRomDialog
 import editCommand
+import addRomFile
+
 
 
 class edit_command(QtWidgets.QDialog, editCommand.Ui_edit_command_dialog):
@@ -100,6 +102,39 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 		backend.add_games(console, directory, extension)
 		self.close()
 		
+class add_roms_file(QtWidgets.QDialog, addRomFile.Ui_add_rom_file_dialog):
+	# Dialog to get information to add to rom datbase table
+	
+	def __init__(self, parent=None):
+		super(add_roms_file, self).__init__(parent)
+		self.setupUi(self)
+		self.generate_combo_box()
+		self.file_button.clicked.connect(self.select_filename)
+		self.verify_button.clicked.connect(self.select_verify_filename)
+		
+	def generate_combo_box(self):
+		
+		self.console_name_combo.clear()
+		full_console_list = backend.console_list()
+		for console in range(len(backend.console_list())):
+			self.console_name_combo.addItem(full_console_list[console][0])
+	
+	def select_filename(self):
+		filename = QtWidgets.QFileDialog.getOpenFileName()
+		self.file_line_edit.setText(filename[0])
+		
+	def select_verify_filename(self):
+		verify_name = QtWidgets.QFileDialog.getOpenFileName()
+		self.verify_line_edit.setText(verify_name[0])
+		
+	def accept(self):
+		console = self.console_name_combo.currentText()
+		filename_file = self.file_line_edit.text()
+		verify_file = self.verify_line_edit.text()
+		backend.add_games_hash(console, filename_file, verify_file)
+		self.close()
+				
+
 class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 	
 	def __init__(self, parent=None):
@@ -112,6 +147,7 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		self.action_add_console.triggered.connect(self.open_add_console)
 		self.action_add_roms.triggered.connect(self.open_add_roms)
 		self.action_edit_console_command.triggered.connect(self.open_edit_command)
+		self.action_add_roms_from_file.triggered.connect(self.open_add_roms_file)
 		self.action_quit.triggered.connect(self.close)
 		self.setWindowIcon(QtGui.QIcon('assets/emu_black_silhouette.svg'))
 
@@ -124,6 +160,10 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 	def open_add_roms(self):
 		
 		add_roms().exec()
+	
+	def open_add_roms_file(self):
+		
+		add_roms_file().exec()
 	
 	def open_edit_command(self):
 		edit_command().exec()
