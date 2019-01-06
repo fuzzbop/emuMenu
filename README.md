@@ -8,12 +8,12 @@ years. there will be bad practice and things in place and it is very much so a w
 requirements are python, python-sqlite3, python-qt5
 
 TODO:
-make this read-me better
-make sql calls better
-take out manual work around that i have in place for hbmame since it is a merged set
-handle merged mame rom sets, and custom rom lists for mame
-more stuff as i think about it
+* make this read-me better
+* make sql calls better
+* take out manual work around that i have in place for hbmame since it is a merged set
+* handle merged mame rom sets, and custom rom lists for mame
+* more stuff as I think about it
 
 Wayout TO-DO:
-simple fullscreen gui possible
+* simple fullscreen gui possible
 
