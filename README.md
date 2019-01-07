@@ -13,7 +13,7 @@ years. There may be bad practice and things in place and it is very much so a wo
 ### TODO:
 * make this read-me better
 * make sql calls better
-* take out manual work around that i have in place for hbmame since it is a merged set
+* ~~take out manual work around that i have in place for hbmame since it is a merged set~~
 * handle merged mame rom sets, and custom rom lists for mame
 * more stuff as I think about it
 
