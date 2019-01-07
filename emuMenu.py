@@ -198,24 +198,25 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		console = self.console_list_widget.currentItem().text()
 		rom = self.rom_list_widget.currentItem().text()
 		command = backend.console_command(console)
+		rom_full_path = backend.full_rom_path(console, rom)
 		
-		if "<ROM>" in command:
-			command = command.replace("<ROM>", '"' + backend.full_rom_path(console, rom) + '"')
+		# if "<ROM>" in command:
+			# command = command.replace("<ROM>", '"' + rom_full_path + '"')
 		
-		elif "hbmame <BASENAME>" in command:
-			base_name = backend.full_rom_path(console, rom)
-			command = command.replace("<BASENAME>", base_name)
+		# elif "hbmame <BASENAME>" in command:
+			# command = command.replace("<BASENAME>", rom_full_path)
 		
-		elif "<BASENAME>" in command:
-			base_name = backend.full_rom_path(console, rom)
-			for slices in range(base_name.count("/")):
-				base_name = base_name[base_name.find("/")+1:]
-			base_name = base_name[:base_name.find(".")]
-			command = command.replace("<BASENAME>", base_name)
-		else:
-			error_dialog = QtWidgets.QErrorMessage()
-			error_dialog.showMessage("<ROM> or <BASENAME> not found in command!")
-		backend.launch(command)
+		# elif "<BASENAME>" in command:
+			# base_name = backend.full_rom_path(console, rom)
+			# for slices in range(base_name.count("/")):
+				# base_name = base_name[base_name.find("/")+1:]
+			# base_name = base_name[:base_name.find(".")]
+			# command = command.replace("<BASENAME>", base_name)
+		# else:
+			# error_dialog = QtWidgets.QErrorMessage()
+			# error_dialog.showMessage("<ROM> or <BASENAME> not found in command!")
+			
+		backend.launch(command, rom_full_path)
 		
 	def contextMenuEvent(self, event):
 		menu = QtWidgets.QMenu(self)

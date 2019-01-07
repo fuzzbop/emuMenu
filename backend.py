@@ -19,6 +19,8 @@ import shlex
 import sqlite3 as lite
 import glob
 import xml.etree.ElementTree as et
+import os
+
 
 db = lite.connect("games.db")
 
@@ -29,10 +31,20 @@ def init_db():
 		cursor = db.cursor()
 		cursor.execute("CREATE TABLE IF NOT EXISTS consoles (name TEXT, command TEXT, hash_file TEXT)")
 
-def launch(command):
+def launch(command, rom_full_path):
 	# Launches command given from string via subprocess and shlex
 
-	subprocess.run(shlex.split(command))
+	if "<ROM>" in command:
+		command = command.replace("<ROM>", '"' + rom_full_path + '"')
+		
+	elif "<BASENAME>" in command:
+			base_name = os.path.basename(rom_full_path)
+			base_name = base_name.split(".")
+			command = command.replace("<BASENAME>", base_name[0])
+	else:
+		print("Command Not Launchable")
+	
+	subprocess.run(shlex.split(os.fsdecode(command)))
 
 def find_pretty_name(test, console, hash_file_lines):
 	# Tests command for <BASENAME> command format, then returns the pretty name based on the hash/txt file supplied
@@ -107,8 +119,9 @@ def add_games(console, directory, extension):
 		for filename in glob.iglob(directory + '/**/*' + extension, recursive=True):
 			name = filename[:-len(extension)-1].replace("'","''")
 
-			for slices in range(name.count("/")):
-				name = name[name.find("/")+1:]
+			#for slices in range(name.count("/")):
+			#	name = name[name.find("/")+1:]
+			name = os.path.basename(name)
 			location = filename
 			pretty_name = find_pretty_name(name, emu, hash_file_lines)
 			if not any(location in test[0] for test in current_games) :
