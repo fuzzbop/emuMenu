@@ -151,7 +151,6 @@ class Ui_emumenu_main_window(object):
         self.action_add_roms_from_file.setObjectName("action_add_roms_from_file")
         self.menu_menu.addAction(self.action_add_console)
         self.menu_menu.addAction(self.action_add_roms)
-        self.menu_menu.addAction(self.action_add_roms_from_file)
         self.menu_menu.addAction(self.action_edit_console_command)
         self.menu_menu.addSeparator()
         self.menu_menu.addAction(self.action_quit)

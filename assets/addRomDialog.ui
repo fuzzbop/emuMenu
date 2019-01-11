@@ -6,21 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>728</width>
-    <height>206</height>
+    <width>1108</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Add Roms From Directory</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="rom_add_button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="0">
+    <widget class="QLabel" name="description_label">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>30</height>
+      </size>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="text">
+      <string>Add roms based on choices below. Some are required together (Directory and Extension)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -78,32 +84,158 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="directory_layout">
-       <property name="spacing">
-        <number>10</number>
-       </property>
+      <layout class="QHBoxLayout" name="hash_layout">
        <item>
-        <widget class="QLabel" name="directory_label">
+        <widget class="QCheckBox" name="hash_checkbox">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>200</width>
            <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>200</width>
            <height>35</height>
           </size>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::Panel</enum>
+         <property name="text">
+          <string>Softlist Hash:</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="hash_line_edit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="hash_button">
+         <property name="text">
+          <string>Open</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="listfull_layout">
+       <item>
+        <widget class="QCheckBox" name="listfull_checkbox">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
          </property>
          <property name="text">
-          <string>Directory :</string>
+          <string>MAME -listfull:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="listfull_line_edit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="listfull_button">
+         <property name="text">
+          <string>Open</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="verify_layout">
+       <item>
+        <widget class="QCheckBox" name="verify_checkbox">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>MAME -verify:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="verify_line_edit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="verify_button">
+         <property name="text">
+          <string>Open</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="custom_layout">
+       <item>
+        <widget class="QCheckBox" name="custom_checkbox">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>MAME Custom List:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="custom_line_edit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="custom_button">
+         <property name="text">
+          <string>Open</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="directory_layout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="directory_checkbox">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Directory:</string>
          </property>
         </widget>
        </item>
@@ -129,27 +261,21 @@
         <number>10</number>
        </property>
        <item>
-        <widget class="QLabel" name="extension_label">
+        <widget class="QCheckBox" name="extension_checkbox">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>200</width>
            <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>200</width>
            <height>35</height>
           </size>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::Panel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
          <property name="text">
-          <string>Extension :</string>
+          <string>Extension:</string>
          </property>
         </widget>
        </item>
@@ -160,13 +286,20 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="description_label">
-     <property name="text">
-      <string>Add Roms from directory chosen.</string>
+   <item row="3" column="0">
+    <widget class="QDialogButtonBox" name="rom_add_button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QProgressBar" name="add_roms_progress">
+     <property name="value">
+      <number>0</number>
      </property>
     </widget>
    </item>

@@ -279,7 +279,6 @@
     </property>
     <addaction name="action_add_console"/>
     <addaction name="action_add_roms"/>
-    <addaction name="action_add_roms_from_file"/>
     <addaction name="action_edit_console_command"/>
     <addaction name="separator"/>
     <addaction name="action_quit"/>
