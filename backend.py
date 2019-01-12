@@ -20,6 +20,7 @@ import sqlite3 as lite
 import glob
 import xml.etree.ElementTree as et
 import os
+import math
 
 db = lite.connect("games.db")
 
@@ -65,13 +66,17 @@ def add_console(name, command):
 
 def add_games_directory(console, directory, extension):
 	# Adds games from a directory with a given extension to a consoles game table after checking if it exists.
-
+	progress = 0
+	counter = 0
 	emu = console_command(console)
 	with db:
 		cursor = db.cursor()
 
 		current_games = rom_location_list(console)
 		for filename in glob.iglob(directory + '/**/*' + extension, recursive=True):
+			counter += 1
+			progress = math.trunc(counter/len(next(os.walk(directory))[2])*100)
+			print(progress)
 			name = filename[:-len(extension)-1].replace("'","''")
 			name = os.path.basename(name)
 			location = filename
@@ -80,23 +85,35 @@ def add_games_directory(console, directory, extension):
 
 def add_games_hash(console, filename):
 	# Adds games from MAME Softlist Hash File
-
+	progress = 0
+	counter = 0
+	current_games = rom_name_list(console)
+	
 	tree = et.parse(filename)
 	root = tree.getroot()
+	length = len(root.findall("software"))
 	for software in root.findall("software"):
+		counter += 1
+		progress = math.trunc(counter/length*100)
+		print(progress)		
 		name = software.get("name")
 		pretty_name = software.find("description").text
 		with db:
-			cursor = db.cursor()
-			cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (name, name, pretty_name))
+			if not any(name in test[0] for test in current_games):
+				cursor = db.cursor()
+				cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (name, name, pretty_name))
 
 def add_games_files(console, text_file = " ", verify_file = " "):
 	# Adds games from verify file, uses text file to get pretty name (written for MAME -listall)
-
+	progress = 0
+	counter = 0
+	current_games = rom_name_list(console)
+	
 	file_lines = text_lines(text_file)
 	if verify_file is not " ":
 		verify_lines = text_lines(verify_file)
-
+	length = len(verify_lines)
+	games = dict()
 	for name in range(len(file_lines)):
 		last_checked = file_lines[name -1].split(" ",1)
 		badname = file_lines[name].split(" ", 1)
@@ -109,11 +126,32 @@ def add_games_files(console, text_file = " ", verify_file = " "):
 			# over when it gets past software and onto hardware.
 			break
 		if len(pretty_name) > 1:
-			for test in range(len(verify_lines)):
-				if command_name in verify_lines[test]:
+			games[command_name] = pretty_name[1]
+	for test in range(len(verify_lines)):
+		counter += 1
+		progress = math.trunc(counter/length*100)
+		print(progress)
+		verify_split = verify_lines[test].split()
+		if verify_split[0] == "romset":
+			if games.get(verify_split[1]) is not None:
+				if "best" in verify_split or "good" in verify_split:
+					if not any(name in exists[0] for exists in current_games):
+						with db:
+							cursor = db.cursor()
+							cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (verify_split[1], verify_split[1], games.get(verify_split[1])))
+		else:
+			if ((games.get(verify_lines[test][:-1]) and verify_lines[test]) is not None):
+				print("command = " + games.get(verify_lines[test][:-1]))
+				print("verify = " + verify_lines[test])
+				if not any(name in exists[0] for exists in current_games):
 					with db:
 						cursor = db.cursor()
-						cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (command_name, command_name, pretty_name[1]))
+						cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (verify_lines[test][:-1], verify_lines[test][:-1], games.get(verify_lines[test][:-1])))
+			#if games.get(test) in verify_lines[test][0]:
+			#	with db:
+			#		if not any(name in test[0] for test in current_games):
+			#			cursor = db.cursor()
+						#cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (command_name, command_name, pretty_name[1]))
 
 def table_length(table):
 	# Returns the length of a table.
@@ -167,6 +205,14 @@ def rom_location_list(console):
 	with db:
 		cursor = db.cursor()
 		cursor.execute("SELECT location FROM '" + console + "' ORDER BY location")
+		return cursor.fetchall()
+
+def rom_name_list(console):
+	# Returns list of roms in supplied console's table
+
+	with db:
+		cursor = db.cursor()
+		cursor.execute("SELECT name FROM '" + console + "' ORDER BY name")
 		return cursor.fetchall()
 
 def rom_list(console):
