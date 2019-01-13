@@ -77,7 +77,7 @@ def add_games_directory(console, directory, extension):
 			counter += 1
 			progress = math.trunc(counter/len(next(os.walk(directory))[2])*100)
 			print(progress)
-			name = filename[:-len(extension)-1].replace("'","''")
+			name = filename[:-(len(extension) + 1)].replace("'","''")
 			name = os.path.basename(name)
 			location = filename
 			if not any(location in test[0] for test in current_games) :
