@@ -10,23 +10,23 @@ I wanted a simple launcher without all the fluff for those of us with huge colle
 this with large collections in mind, but it is also the first thing I have written in a large number of 
 years. There may be bad practice and things in place and it is very much so a work in progress.
 
-###HOW TO Install:
+## HOW TO Install:
 	
-#Linux:
+### Linux:
 * Install your distributions packages for python3 and python3-PyQt5
 * currently your database and the contents for the project should be housed in the same directory
 * run with python emuMenu.py
 
-#Windows:
+### Windows:
 
 * Install Python 3 https://www.python.org/downloads/ be sure to check PATH option during install
 * Install Qt https://www.qt.io/download-qt-installer
 * Install PyQt5 "python -m pip install PyQt5"
 		
-#Mac:
+### Mac:
 * Fuck if I know, but it should work in theory
 
-###HOW TO Use:
+## HOW TO Use:
 Default database will be created when you first open the program. you must add a console first. Hit the Add Console menu item, and give
 the console a name (you can name it anything) in the second line you need to type out the command to launch the rom using <ROM> and <BASENAME>
 to designate where to put the rom information pulled from the database. <ROM> is a full path to a rom file, <BASENAME> is just the name 
@@ -43,13 +43,13 @@ Now you will have a list of consoles on the left pane and roms on the right pane
 You can purge roms for a console by right clicking the console and selecting purge roms. you can edit the console's command as well.
 
 
-### TODO:
+## TODO:
 * make this read-me better
 * make sql calls better
 * ~~take out manual work around that i have in place for hbmame since it is a merged set~~
 * ~~handle merged mame rom sets, and custom rom lists for mame~~
 * more stuff as I think about it
 
-### Wayout TO-DO:
+## Wayout TO-DO:
 * simple fullscreen gui possible
 
