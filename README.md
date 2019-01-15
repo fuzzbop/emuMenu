@@ -27,12 +27,14 @@ years. There may be bad practice and things in place and it is very much so a wo
 * Fuck if I know, but it should work in theory
 
 ## HOW TO Use:
-Default database will be created when you first open the program. you must add a console first. Hit the Add Console menu item, and give
-the console a name (you can name it anything) in the second line you need to type out the command to launch the rom using <ROM> and <BASENAME>
-to designate where to put the rom information pulled from the database. <ROM> is a full path to a rom file, <BASENAME> is just the name 
-of the file without the path or extension (Useful for MAME).
+A default database will be created when you first open the program. 
 
-After you add your console. you need to add some roms. there is currently three implemented ways to do this with the Add Roms menu item.
+* You must add a console before you add any games.  
+	* Hit the Add Console menu item, and give the console a name (you can name it anything.) 
+	* In the second line you need to type out the command to launch the rom using <ROM> and <BASENAME> to designate where to put the rom information pulled from the database. 
+<ROM> is a full path to a rom file, <BASENAME> is just the name of the file without the path or extension (Useful for MAME).
+
+After you add your console, you need to add some roms. There are currently three implemented ways to do this with the Add Roms menu item.
 * If you check Hash, you provide the hash file for the MAME softlist (currently adds full list, dosent check for avaliablity).
 * If you check Directory and Extension, you provide a directory with the open button, and type in your extension (without the .).
 * If you check listfull and either verify or custom: You provide the output of mame -listfull to listfull, the output of mame -verify or a custom list of roms (In the style of MFM, so a basename for each mame rom you would like on each line of the txt file.)
