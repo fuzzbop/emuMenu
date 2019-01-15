@@ -21,8 +21,10 @@ import glob
 import xml.etree.ElementTree as et
 import os
 import math
+import pathlib
 
-db = lite.connect("games.db")
+pathlib.Path.mkdir(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu"), parents=True, exist_ok=True)
+db = lite.connect(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu/games.db"))
 
 def init_db():
 	# Function to initialise the database.
