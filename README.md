@@ -30,9 +30,9 @@ years. There may be bad practice and things in place and it is very much so a wo
 A default database will be created when you first open the program. 
 
 * You must add a console before you add any games.  
-	* Hit the Add Console menu item, and give the console a name (you can name it anything.) 
-	* In the second line you need to type out the command to launch the rom using <ROM> and <BASENAME> to designate where to put the rom information pulled from the database. 
-<ROM> is a full path to a rom file, <BASENAME> is just the name of the file without the path or extension (Useful for MAME).
+* Hit the Add Console menu item, and give the console a name (you can name it anything.) 
+* In the second line you need to type out the command to launch the rom using \<ROM\> and \<BASENAME\> to designate where to put the rom information pulled from the database. 
+* \<ROM\> is a full path to a rom file, \<BASENAME\> is just the name of the file without the path or extension (Useful for MAME).
 
 After you add your console, you need to add some roms. There are currently three implemented ways to do this with the Add Roms menu item.
 * If you check Hash, you provide the hash file for the MAME softlist (currently adds full list, dosent check for avaliablity).
