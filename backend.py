@@ -46,8 +46,13 @@ def launch(command, rom_full_path):
 			command = command.replace("<BASENAME>", base_name[0])
 	else:
 		print("Command Not Launchable")
-
-	subprocess.run(shlex.split(os.fsdecode(command)))
+	command = str(pathlib.PurePath(command))
+	
+	if os.name == "posix":
+		subprocess.run(shlex.split(command))
+	else:
+		subprocess.run(str(pathlib.Path(command)))
+		
 
 def text_lines(text_file):
 	# Returns and list with the contents of each line of the supplied text file.
@@ -75,7 +80,7 @@ def add_games_directory(console, directory, extension):
 		cursor = db.cursor()
 
 		current_games = rom_location_list(console)
-		for filename in glob.iglob(directory + '/**/*' + extension, recursive=True):
+		for filename in glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True):
 			counter += 1
 			progress = math.trunc(counter/len(next(os.walk(directory))[2])*100)
 			print(progress)
