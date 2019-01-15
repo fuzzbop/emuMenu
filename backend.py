@@ -51,7 +51,7 @@ def launch(command, rom_full_path):
 	if os.name == "posix":
 		subprocess.run(shlex.split(command))
 	else:
-		subprocess.run(str(pathlib.Path(command)))
+		subprocess.run(command)
 		
 
 def text_lines(text_file):
