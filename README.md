@@ -40,9 +40,9 @@ After you add your console, you need to add some roms. There are currently three
 * If you check listfull and either verify or custom: You provide the output of mame -listfull to listfull, the output of mame -verify or a custom list of roms (In the style of MFM, so a basename for each mame rom you would like on each line of the txt file.)
 	   
 The -listfull and -verify option takes quite a while to run (around 20 min) 
-Now you will have a list of consoles on the left pane and roms on the right pane. these are all generated on the fly. 
+Now you will have a list of consoles on the left pane and roms on the right pane. These are all generated on the fly. 
 
-You can purge roms for a console by right clicking the console and selecting purge roms. you can edit the console's command as well.
+You can purge roms for a console by right clicking the console and selecting purge roms. You can edit the console's command as well.
 
 
 ## TODO:
