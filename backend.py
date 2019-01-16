@@ -245,5 +245,5 @@ def rom_list(console):
 
 	with db:
 		cursor = db.cursor()
-		cursor.execute("SELECT pretty_name FROM '" + console + "' ORDER BY pretty_name")
+		cursor.execute("SELECT pretty_name FROM '" + console + "' ORDER BY pretty_name COLLATE NOCASE ASC")
 		return cursor.fetchall()
