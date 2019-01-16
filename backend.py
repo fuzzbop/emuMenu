@@ -100,7 +100,7 @@ def add_games_directory(console, directory, extension):
 		current_games = rom_location_list(console)
 		for filename in glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True):
 			counter += 1
-			progress = math.trunc(counter/len(next(os.walk(directory))[2])*100)
+			progress = math.trunc(counter/len(next(glob.iglob(directory, recursive=True))))*100
 			print(progress)
 			name = filename[:-(len(extension) + 1)].replace("'","''")
 			name = os.path.basename(name)
