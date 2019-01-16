@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # emuMenu - A Simple Emulator Frontend
 # Copyright (C) 2019 James Sparks II
 #
@@ -177,8 +178,8 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		self.action_add_console.triggered.connect(self.open_add_console)
 		self.action_add_roms.triggered.connect(self.open_add_roms)
 		self.action_edit_console_command.triggered.connect(self.open_edit_command)
-		self.action_add_roms_from_file.triggered.connect(self.open_add_roms_file)
 		self.action_quit.triggered.connect(self.close)
+		self.random_button.clicked.connect(backend.launch_random)
 		self.setWindowIcon(QtGui.QIcon('assets/emu_black_silhouette.svg'))
 
 
@@ -227,9 +228,7 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 
 		console = self.console_list_widget.currentItem().text()
 		rom = self.rom_list_widget.currentItem().text()
-		command = backend.console_command(console)
-		rom_full_path = backend.full_rom_path(console, rom)
-		backend.launch(command, rom_full_path)
+		backend.launch(console, rom)
 
 	def contextMenuEvent(self, event):
 		# Right click menu for consoles

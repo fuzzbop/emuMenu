@@ -22,9 +22,11 @@ import xml.etree.ElementTree as et
 import os
 import math
 import pathlib
+import random
 
 pathlib.Path.mkdir(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu"), parents=True, exist_ok=True)
-db = lite.connect(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu/games.db"))
+working_dir = pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu")
+db = lite.connect(pathlib.PurePath.joinpath(working_dir, "games.db"))
 
 def init_db():
 	# Function to initialise the database.
@@ -32,11 +34,20 @@ def init_db():
 	with db:
 		cursor = db.cursor()
 		cursor.execute("CREATE TABLE IF NOT EXISTS consoles (name TEXT, command TEXT)")
+def update_txt(console, rom):
+	current_game = open(pathlib.PurePath.joinpath(working_dir, "now_playing.txt"), "w+")
+	current_game.truncate()
+	current_game.write("Now Playing: " + rom + " on " + console + " \r\n")
+	current_game.close
 
-def launch(command, rom_full_path):
+def launch(console, rom):
 	# Launches command given from string via subprocess and shlex.
 	# Needs rewritten for multiplatform compatibility.
 
+	command = console_command(console)
+	rom_full_path = full_rom_path(console, rom)
+	update_txt(console, rom)
+			
 	if "<ROM>" in command:
 		command = command.replace("<ROM>", '"' + rom_full_path + '"')
 
@@ -52,7 +63,14 @@ def launch(command, rom_full_path):
 		subprocess.run(shlex.split(command))
 	else:
 		subprocess.run(command)
-		
+
+def launch_random():
+	consoles = console_list()
+	random_number = random.SystemRandom()
+	random_console = consoles[random_number.randint(0,len(consoles)-1)][0]
+	roms = rom_list(random_console)
+	random_rom = roms[random_number.randint(0,len(roms)-1)][0]
+	launch(random_console, random_rom)
 
 def text_lines(text_file):
 	# Returns and list with the contents of each line of the supplied text file.
