@@ -43,9 +43,12 @@ def update_txt(console, rom):
 def launch(console, rom):
 	# Launches command given from string via subprocess and shlex.
 	# Needs rewritten for multiplatform compatibility.
-
+	print(rom)
 	command = console_command(console)
-	rom_full_path = full_rom_path(console, rom)
+	if "/" in rom:
+		rom_full_path = rom
+	else:
+		rom_full_path = full_rom_path(console, rom)
 	update_txt(console, rom)
 			
 	if "<ROM>" in command:

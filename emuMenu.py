@@ -22,8 +22,7 @@ import emuMenuMainWindow
 import addConsoleDialog
 import addRomDialog
 import editCommand
-
-
+import customRomDialog
 
 class edit_command(QtWidgets.QDialog, editCommand.Ui_edit_command_dialog):
 	# Dialog to edit commands
@@ -165,6 +164,21 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 			error.setWindowTitle("Error")
 			error.setText("Invalid Combination")
 			error.exec()
+			
+class custom_roms(QtWidgets.QDialog, customRomDialog.Ui_launch_rom_dialog):
+	def __init__(self, console, parent=None):
+		super(custom_roms, self).__init__(parent)
+		self.console = console
+		self.setupUi(self)
+		self.rom_location_button.clicked.connect(self.select_rom)
+		
+	def select_rom(self):
+		rom_location = QtWidgets.QFileDialog.getOpenFileName()
+		self.rom_location_line_edit.setText(rom_location[0])
+	
+	def accept(self):
+		backend.launch(self.console, self.rom_location_line_edit.text())
+		self.close()
 
 class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 
@@ -236,11 +250,20 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		menu = QtWidgets.QMenu(self)
 		purge_action = menu.addAction("Purge Roms")
 		edit_command = menu.addAction("Change Launch Command")
+		custom_rom = menu.addAction("Launch Custom Rom")
 		action = menu.exec(self.mapToGlobal(event.pos()))
 		if action == purge_action:
 			self.purge_console_roms()
 		elif action == edit_command:
 			self.open_edit_command()
+		elif action == custom_rom:
+			self.open_custom_rom()
+
+	def open_custom_rom(self):
+		# Opens specified rom 
+		
+		custom_roms(self.console_list_widget.currentItem().text()).exec()
+		
 
 	def purge_console_roms(self):
 		# Passes console to backend to remove all roms in database
