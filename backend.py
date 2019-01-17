@@ -45,12 +45,12 @@ def launch(console, rom):
 	# Needs rewritten for multiplatform compatibility.
 	print(rom)
 	command = console_command(console)
-	if "/" in rom:
+	if os.sep in rom:
 		rom_full_path = rom
 	else:
 		rom_full_path = full_rom_path(console, rom)
 	update_txt(console, rom)
-			
+
 	if "<ROM>" in command:
 		command = command.replace("<ROM>", '"' + rom_full_path + '"')
 
@@ -61,19 +61,38 @@ def launch(console, rom):
 	else:
 		print("Command Not Launchable")
 	command = str(pathlib.PurePath(command))
-	
+
 	if os.name == "posix":
 		subprocess.run(shlex.split(command))
 	else:
 		subprocess.run(command)
 
 def launch_random():
+	# Launches a random game from a random console.
+	
 	consoles = console_list()
 	random_number = random.SystemRandom()
 	random_console = consoles[random_number.randint(0,len(consoles)-1)][0]
 	roms = rom_list(random_console)
 	random_rom = roms[random_number.randint(0,len(roms)-1)][0]
 	launch(random_console, random_rom)
+
+def search_roms(search):
+	# Searches rom names in database for search term provided.
+	
+	with db:
+		cursor = db.cursor()
+		cursor.execute("SELECT name FROM sqlite_master WHERE type='table'" )
+		console_list = cursor.fetchall()
+		results = []
+		for test in range(len(console_list)):		
+			if "consoles" not in console_list[test][0]:
+				cursor.execute("SELECT pretty_name FROM '" + console_list[test][0] + "' WHERE pretty_name LIKE ?", ("%" + search + "%",))
+				raw_results = cursor.fetchall()
+				if raw_results:
+					results.append(console_list[test][0])
+					results.append(raw_results)
+		return results
 
 def text_lines(text_file):
 	# Returns and list with the contents of each line of the supplied text file.
@@ -94,6 +113,7 @@ def add_console(name, command):
 
 def add_games_directory(console, directory, extension):
 	# Adds games from a directory with a given extension to a consoles game table after checking if it exists.
+
 	progress = 0
 	counter = 0
 	emu = console_command(console)
@@ -113,6 +133,7 @@ def add_games_directory(console, directory, extension):
 
 def add_games_hash(console, filename):
 	# Adds games from MAME Softlist Hash File
+
 	progress = 0
 	counter = 0
 	current_games = rom_name_list(console)
@@ -123,7 +144,7 @@ def add_games_hash(console, filename):
 	for software in root.findall("software"):
 		counter += 1
 		progress = math.trunc(counter/length*100)
-		print(progress)		
+		print(progress)
 		name = software.get("name")
 		pretty_name = software.find("description").text
 		with db:
@@ -133,10 +154,11 @@ def add_games_hash(console, filename):
 
 def add_games_files(console, text_file = " ", verify_file = " "):
 	# Adds games from verify file, uses text file to get pretty name (written for MAME -listall)
+
 	progress = 0
 	counter = 0
 	current_games = rom_name_list(console)
-	
+
 	file_lines = text_lines(text_file)
 	if verify_file is not " ":
 		verify_lines = text_lines(verify_file)
@@ -175,11 +197,6 @@ def add_games_files(console, text_file = " ", verify_file = " "):
 					with db:
 						cursor = db.cursor()
 						cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (verify_lines[test][:-1], verify_lines[test][:-1], games.get(verify_lines[test][:-1])))
-			#if games.get(test) in verify_lines[test][0]:
-			#	with db:
-			#		if not any(name in test[0] for test in current_games):
-			#			cursor = db.cursor()
-						#cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (command_name, command_name, pretty_name[1]))
 
 def table_length(table):
 	# Returns the length of a table.
@@ -228,7 +245,7 @@ def console_list():
 		return cursor.fetchall()
 
 def rom_location_list(console):
-	# returns list of roms by location for checking if roms allready in list
+	# Returns list of roms by location for checking if roms allready in list
 
 	with db:
 		cursor = db.cursor()

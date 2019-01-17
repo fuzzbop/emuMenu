@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 import sys
 import backend
 import emuMenuMainWindow
@@ -23,6 +23,7 @@ import addConsoleDialog
 import addRomDialog
 import editCommand
 import customRomDialog
+import searchDialog
 
 class edit_command(QtWidgets.QDialog, editCommand.Ui_edit_command_dialog):
 	# Dialog to edit commands
@@ -166,6 +167,8 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 			error.exec()
 			
 class custom_roms(QtWidgets.QDialog, customRomDialog.Ui_launch_rom_dialog):
+	# Allows user to specify rom location, so it dosent need to be added to the database
+	
 	def __init__(self, console, parent=None):
 		super(custom_roms, self).__init__(parent)
 		self.console = console
@@ -178,6 +181,44 @@ class custom_roms(QtWidgets.QDialog, customRomDialog.Ui_launch_rom_dialog):
 	
 	def accept(self):
 		backend.launch(self.console, self.rom_location_line_edit.text())
+		self.close()
+
+class search_roms(QtWidgets.QDialog, searchDialog.Ui_search_dialog):
+	# Allows user to search database for rom name.
+	
+	def __init__(self, parent=None):
+		super(search_roms, self).__init__(parent)
+		self.setupUi(self)
+		self.search_bar_button.clicked.connect(self.search_generate_consoles)
+		self.console_list.itemClicked.connect(self.search_generate_roms)
+		self.rom_list.itemDoubleClicked.connect(self.launch)
+
+
+	def keyPressEvent(self, event):
+		if event.key() == QtCore.Qt.Key_Return:
+			self.search_generate_consoles()
+
+	def search_generate_consoles(self):
+		self.console_list.clear()
+		self.rom_list.clear()
+		result_list = backend.search_roms(self.search_bar_line_edit.text())
+		for x in range(len(result_list)):
+			if x%2 == 0:
+				self.console_list.addItem(result_list[x])
+
+	def search_generate_roms(self):
+		self.rom_list.clear()
+		selected_console = self.console_list.currentItem().text()
+		result_list = backend.search_roms(self.search_bar_line_edit.text())
+		for x in range(len(result_list[result_list.index(selected_console)+1])):
+			self.rom_list.addItem(result_list[result_list.index(selected_console)+1][x][0])
+			
+	def launch(self):
+		console = self.console_list.currentItem().text()
+		rom = self.rom_list.currentItem().text()
+		backend.launch(console, rom)
+
+	def accept(self):
 		self.close()
 
 class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
@@ -194,9 +235,14 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		self.action_edit_console_command.triggered.connect(self.open_edit_command)
 		self.action_quit.triggered.connect(self.close)
 		self.random_button.clicked.connect(backend.launch_random)
+		self.search_button.clicked.connect(self.open_search_roms)
 		self.setWindowIcon(QtGui.QIcon('assets/emu_black_silhouette.svg'))
 
 
+	def open_search_roms(self):
+		
+		search_roms().exec()
+		
 	def open_add_console(self):
 
 		add_console().exec()

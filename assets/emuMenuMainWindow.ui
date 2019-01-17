@@ -263,8 +263,15 @@
      <widget class="QStatusBar" name="status_bar"/>
     </item>
     <item row="1" column="0">
-     <layout class="QHBoxLayout" name="button_layout" stretch="0">
-      <item alignment="Qt::AlignRight">
+     <layout class="QHBoxLayout" name="button_layout">
+      <item>
+       <widget class="QPushButton" name="search_button">
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="random_button">
         <property name="text">
          <string>Play Random Game</string>
