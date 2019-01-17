@@ -21,7 +21,7 @@ years. There may be bad practice and things in place and it is very much so a wo
 
 * Install Python 3 https://www.python.org/downloads/ be sure to check PATH option during install
 * Install Qt https://www.qt.io/download-qt-installer
-* Install PyQt5 "python -m pip install PyQt5"
+* Install PyQt5 type "python -m pip install PyQt5" into command line (search cmd when you open start menu)
 		
 ### Mac:
 * Fuck if I know, but it should work in theory
