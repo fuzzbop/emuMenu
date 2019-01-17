@@ -44,6 +44,19 @@ Now you will have a list of consoles on the left pane and roms on the right pane
 
 You can purge roms for a console by right clicking the console and selecting purge roms. You can edit the console's command as well.
 
+## Screenshots
+### Main Screen
+![Main Screen](https://i.imgur.com/i7YaSTV.png)
+
+### Search Screen
+![Search Screen](https://i.imgur.com/QmVQd8m.png)
+
+### Add Console
+![Add Console](https://i.imgur.com/SC1fNsr.png)
+
+### Add Roms
+![Add Roms](https://i.imgur.com/CorLrO5.png)
+
 
 ## TODO:
 * make this read-me better
