@@ -24,6 +24,7 @@ import addRomDialog
 import editCommand
 import customRomDialog
 import searchDialog
+import favoritesDialog
 
 class edit_command(QtWidgets.QDialog, editCommand.Ui_edit_command_dialog):
 	# Dialog to edit commands
@@ -165,7 +166,7 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 			error.setWindowTitle("Error")
 			error.setText("Invalid Combination")
 			error.exec()
-			
+					
 class custom_roms(QtWidgets.QDialog, customRomDialog.Ui_launch_rom_dialog):
 	# Allows user to specify rom location, so it dosent need to be added to the database
 	
@@ -182,7 +183,45 @@ class custom_roms(QtWidgets.QDialog, customRomDialog.Ui_launch_rom_dialog):
 	def accept(self):
 		backend.launch(self.console, self.rom_location_line_edit.text())
 		self.close()
+		
+class favorite_roms(QtWidgets.QDialog, favoritesDialog.Ui_favorite_dialog):
+	# Allows user to specify rom location, so it dosent need to be added to the database
+	
+	def __init__(self, parent=None):
+		super(favorite_roms, self).__init__(parent)
+		self.setupUi(self)
+		self.console_list.itemClicked.connect(self.generate_rom_list)
+		self.rom_list.itemDoubleClicked.connect(self.launch)
+		self.rom_list.installEventFilter(self)
+		self.generate_consoles()
+		
+	def generate_consoles(self):
+		favorites_console_list = backend.favorite_console_list()
+		for console in range(len(favorites_console_list)):
+			if not self.console_list.findItems(favorites_console_list[console][0], QtCore.Qt.MatchExactly):
+				self.console_list.addItem(favorites_console_list[console][0])
+	
+	def generate_rom_list(self):
 
+		console = self.console_list.currentItem().text()
+		self.rom_list.clear()
+		full_rom_list = backend.favorite_rom_list(console)
+		for rom in range(len(full_rom_list)):
+			self.rom_list.addItem(full_rom_list[rom][0])
+		
+		
+	def eventFilter(self, source, event):
+		if (event.type() == QtCore.QEvent.ContextMenu and source is self.rom_list):
+			menu = QtWidgets.QMenu()
+			purge_action = menu.addAction("Remove From Favorites")
+			if menu.exec_(event.globalPos()) == purge_action:
+				backend.remove_favorite(self.console_list.currentItem().text(), self.rom_list.currentItem().text())
+				self.generate_rom_list()
+		return super(favorite_roms, self).eventFilter(source, event)
+	
+	def launch(self):
+		backend.launch(self.console_list.currentItem().text(), self.rom_list.currentItem().text())
+					
 class search_roms(QtWidgets.QDialog, searchDialog.Ui_search_dialog):
 	# Allows user to search database for rom name.
 	
@@ -236,9 +275,11 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		self.action_quit.triggered.connect(self.close)
 		self.random_button.clicked.connect(backend.launch_random)
 		self.search_button.clicked.connect(self.open_search_roms)
+		self.favorites_button.clicked.connect(self.open_favorite_roms)
 		self.setWindowIcon(QtGui.QIcon('assets/emu_black_silhouette.svg'))
-
-
+		self.console_list_widget.installEventFilter(self)
+		self.rom_list_widget.installEventFilter(self)
+		
 	def open_search_roms(self):
 		
 		search_roms().exec()
@@ -259,6 +300,9 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 	def open_edit_command(self):
 		edit_command().exec()
 
+	def open_favorite_roms(self):
+		favorite_roms().exec()
+	
 	def resize_console_list(self):
 
 		self.console_label.setMaximumWidth(self.console_list_widget.sizeHintForColumn(0) + 25)
@@ -290,26 +334,34 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		rom = self.rom_list_widget.currentItem().text()
 		backend.launch(console, rom)
 
-	def contextMenuEvent(self, event):
-		# Right click menu for consoles
-
-		menu = QtWidgets.QMenu(self)
-		purge_action = menu.addAction("Purge Roms")
-		edit_command = menu.addAction("Change Launch Command")
-		custom_rom = menu.addAction("Launch Custom Rom")
-		action = menu.exec(self.mapToGlobal(event.pos()))
-		if action == purge_action:
-			self.purge_console_roms()
-		elif action == edit_command:
-			self.open_edit_command()
-		elif action == custom_rom:
-			self.open_custom_rom()
-
+	def eventFilter(self, source, event):
+		if (event.type() == QtCore.QEvent.ContextMenu and source is self.console_list_widget):
+			menu = QtWidgets.QMenu()
+			purge_action = menu.addAction("Purge Roms")
+			edit_command = menu.addAction("Change Launch Command")
+			custom_rom = menu.addAction("Launch Custom Rom")
+			if menu.exec_(event.globalPos()) == purge_action:
+				self.purge_console_roms()
+			elif menu.exec_(event.globalPos())== edit_command:
+				self.open_edit_command()
+			elif menu.exec_(event.globalPos()) == custom_rom:
+				self.open_custom_rom()	
+			return True
+		elif (event.type() == QtCore.QEvent.ContextMenu and source is self.rom_list_widget):
+			menu = QtWidgets.QMenu(self)
+			add_favorite = menu.addAction("Add Rom To Favorites")
+			if menu.exec_(event.globalPos()) == add_favorite:
+				self.add_to_favorites()
+					
+		return super(emuMenu, self).eventFilter(source, event)
 	def open_custom_rom(self):
 		# Opens specified rom 
 		
 		custom_roms(self.console_list_widget.currentItem().text()).exec()
 		
+	def add_to_favorites(self):
+		# Adds selected rom to favorites
+		backend.add_favorite(self.console_list_widget.currentItem().text(), self.rom_list_widget.currentItem().text())
 
 	def purge_console_roms(self):
 		# Passes console to backend to remove all roms in database

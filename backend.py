@@ -34,7 +34,10 @@ def init_db():
 	with db:
 		cursor = db.cursor()
 		cursor.execute("CREATE TABLE IF NOT EXISTS consoles (name TEXT, command TEXT)")
+		cursor.execute("CREATE TABLE IF NOT EXISTS favorites (pretty_name TEXT, location TEXT, console TEXT)")
+
 def update_txt(console, rom):
+	# Create and/or populate text file with game being launched
 	current_game = open(pathlib.PurePath.joinpath(working_dir, "now_playing.txt"), "w+")
 	current_game.truncate()
 	current_game.write("Now Playing: " + rom + " on " + console + " \r\n")
@@ -42,8 +45,7 @@ def update_txt(console, rom):
 
 def launch(console, rom):
 	# Launches command given from string via subprocess and shlex.
-	# Needs rewritten for multiplatform compatibility.
-	print(rom)
+
 	command = console_command(console)
 	if os.sep in rom:
 		rom_full_path = rom
@@ -197,6 +199,37 @@ def add_games_files(console, text_file = " ", verify_file = " "):
 					with db:
 						cursor = db.cursor()
 						cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (verify_lines[test][:-1], verify_lines[test][:-1], games.get(verify_lines[test][:-1])))
+
+def add_favorite(console, rom):
+	# Adds rom to favorites database table
+
+	location = full_rom_path(console, rom)
+	with db:
+		cursor = db.cursor()
+		cursor.execute("INSERT INTO favorites VALUES(?,?,?)", (rom, location, console))
+
+def favorite_console_list():
+	# Generate list of consoles in favorites database
+
+	with db:
+		cursor = db.cursor()
+		cursor.execute("SELECT console FROM favorites ORDER BY console")
+		return cursor.fetchall()
+		
+def favorite_rom_list(console):
+	# Generates full rom list from favorites database
+	
+	with db:
+		cursor = db.cursor()
+		cursor.execute("SELECT pretty_name FROM favorites WHERE console='" + console +"' ORDER BY pretty_name")
+		return cursor.fetchall()
+
+def remove_favorite(console, rom):
+		# Remove rom from favorites.
+		
+	with db:
+		cursor = db.cursor()
+		cursor.execute("DELETE FROM favorites WHERE console=? AND pretty_name=?", (console, rom))
 
 def table_length(table):
 	# Returns the length of a table.

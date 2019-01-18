@@ -265,6 +265,13 @@
     <item row="1" column="0">
      <layout class="QHBoxLayout" name="button_layout">
       <item>
+       <widget class="QPushButton" name="favorites_button">
+        <property name="text">
+         <string>Favorites</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="search_button">
         <property name="text">
          <string>Search</string>

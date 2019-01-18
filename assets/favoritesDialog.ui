@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>search_dialog</class>
- <widget class="QDialog" name="search_dialog">
+ <class>favorite_dialog</class>
+ <widget class="QDialog" name="favorite_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Search Roms</string>
+   <string>Favorites</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="search_dialog_buttonbox">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="favorite_dialog_buttonbox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -24,7 +24,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="main_layout">
      <item>
       <layout class="QVBoxLayout" name="console_layout">
@@ -74,41 +74,14 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="search_bar_layout">
-     <item>
-      <widget class="QLabel" name="search_label">
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <property name="text">
-        <string>Search:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="search_bar_line_edit"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="search_bar_button">
-       <property name="text">
-        <string>GO!</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>search_dialog_buttonbox</sender>
+   <sender>favorite_dialog_buttonbox</sender>
    <signal>accepted()</signal>
-   <receiver>search_dialog</receiver>
+   <receiver>favorite_dialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -122,9 +95,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>search_dialog_buttonbox</sender>
+   <sender>favorite_dialog_buttonbox</sender>
    <signal>rejected()</signal>
-   <receiver>search_dialog</receiver>
+   <receiver>favorite_dialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
