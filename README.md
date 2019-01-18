@@ -61,7 +61,7 @@ You can purge roms for a console by right clicking the console and selecting pur
 
 ## TODO:
 * ~~Handle merged MAME rom sets, and custom rom lists for MAME~~
-* Create favorites database and window
+* ~~Create favorites database and window~~
 * Clean up various parts of the GUI
 * More features as I think of them or get suggestions
 * Clean up code
