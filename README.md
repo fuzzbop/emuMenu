@@ -29,7 +29,6 @@ years. There may be bad practice and things in place and it is very much so a wo
 * Fuck if I know, but it should work in theory
 
 ## HOW TO Use:
-### The progress bars are currently non functional
 
 A default database will be created when you first open the program.
 
@@ -75,7 +74,7 @@ will pop up that has a search bar above it, when you search a term all results i
 ## TODO:
 * ~~Handle merged MAME rom sets, and custom rom lists for MAME~~
 * ~~Create favorites database and window~~
-* Implement progress bars
+* ~~Implement progress bars~~
 * Clean up various parts of the GUI
 * More features as I think of them or get suggestions
 * Clean up code

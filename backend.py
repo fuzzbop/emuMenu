@@ -26,7 +26,7 @@ import random
 
 pathlib.Path.mkdir(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu"), parents=True, exist_ok=True)
 working_dir = pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu")
-db = lite.connect(pathlib.PurePath.joinpath(working_dir, "games.db"))
+db = lite.connect(pathlib.PurePath.joinpath(working_dir, "games.db"), check_same_thread=False)
 
 def init_db():
 	# Function to initialise the database.
@@ -116,17 +116,17 @@ def add_console(name, command):
 def add_games_directory(console, directory, extension):
 	# Adds games from a directory with a given extension to a consoles game table after checking if it exists.
 
-	progress = 0
+	progress(0)
 	counter = 0
 	emu = console_command(console)
+	length = len(list(glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True)))
 	with db:
 		cursor = db.cursor()
 
 		current_games = rom_location_list(console)
 		for filename in glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True):
 			counter += 1
-			progress = math.trunc(counter/len(next(glob.iglob(directory, recursive=True))))*100
-			print(progress)
+			progress(math.trunc(counter/length*100))
 			name = filename[:-(len(extension) + 1)].replace("'","''")
 			name = os.path.basename(name)
 			location = filename
@@ -136,7 +136,7 @@ def add_games_directory(console, directory, extension):
 def add_games_hash(console, filename):
 	# Adds games from MAME Softlist Hash File
 
-	progress = 0
+	progress(0)
 	counter = 0
 	current_games = rom_name_list(console)
 	
@@ -145,8 +145,7 @@ def add_games_hash(console, filename):
 	length = len(root.findall("software"))
 	for software in root.findall("software"):
 		counter += 1
-		progress = math.trunc(counter/length*100)
-		print(progress)
+		progress(math.trunc(counter/length*100))
 		name = software.get("name")
 		pretty_name = software.find("description").text
 		with db:
@@ -157,14 +156,14 @@ def add_games_hash(console, filename):
 def add_games_files(console, text_file = " ", verify_file = " "):
 	# Adds games from verify file, uses text file to get pretty name (written for MAME -listall)
 
-	progress = 0
+	progress(0)
 	counter = 0
 	current_games = rom_name_list(console)
 
 	file_lines = text_lines(text_file)
 	if verify_file is not " ":
 		verify_lines = text_lines(verify_file)
-	length = len(verify_lines)
+	length = len(verify_lines)-1
 	games = dict()
 	for name in range(len(file_lines)):
 		last_checked = file_lines[name -1].split(" ",1)
@@ -181,8 +180,7 @@ def add_games_files(console, text_file = " ", verify_file = " "):
 			games[command_name] = pretty_name[1]
 	for test in range(len(verify_lines)):
 		counter += 1
-		progress = math.trunc(counter/length*100)
-		print(progress)
+		progress(math.trunc(counter/length*100))
 		verify_split = verify_lines[test].split()
 		if verify_split[0] == "romset":
 			if games.get(verify_split[1]) is not None:
@@ -199,6 +197,9 @@ def add_games_files(console, text_file = " ", verify_file = " "):
 					with db:
 						cursor = db.cursor()
 						cursor.execute("INSERT INTO '" + console + "' VALUES(?,?,?)", (verify_lines[test][:-1], verify_lines[test][:-1], games.get(verify_lines[test][:-1])))
+
+def progress(value):
+	progress.percentage=value
 
 def add_favorite(console, rom):
 	# Adds rom to favorites database table

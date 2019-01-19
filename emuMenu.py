@@ -16,6 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from PyQt5 import QtGui, QtWidgets, QtCore
+from threading import Thread
 import sys
 import backend
 import emuMenuMainWindow
@@ -136,30 +137,38 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 			or self.listfull_checkbox.isChecked()
 			or self.custom_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
-			backend.add_games_directory(console, directory, extension)
-			self.close()
+			add_thread = Thread(target = backend.add_games_directory, args = (console, directory, extension))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
 		elif (self.hash_checkbox.isChecked()
 			and not (self.directory_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
 			or self.listfull_checkbox.isChecked()
 			or self.custom_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
-			backend.add_games_hash(console, hash_file)
-			self.close()
+			add_thread = Thread(target = backend.add_games_hash, args = (console, hash_file))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
 		elif ((self.listfull_checkbox.isChecked() and self.verify_checkbox.isChecked())
 			and not (self.hash_checkbox.isChecked()
 			or self.directory_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
 			or self.custom_checkbox.isChecked())):
-			backend.add_games_files(console, listfull_file, verify_file)
-			self.close()
+			add_thread = Thread(target = backend.add_games_files, args = (console, listfull_file, verify_file))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
 		elif ((self.listfull_checkbox.isChecked() and self.custom_checkbox.isChecked())
 			and not (self.hash_checkbox.isChecked()
 			or self.directory_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
-			backend.add_games_files(console, listfull_file, mame_custom_file)
-			self.close()
+			add_thread = Thread(target = backend.add_games_files, args = (console, listfull_file, mame_custom_file))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
 		else:
 			error = QtWidgets.QMessageBox()
 			error.setIcon(QtWidgets.QMessageBox.Critical)
