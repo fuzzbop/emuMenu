@@ -59,21 +59,21 @@ will pop up that has a search bar above it, when you search a term all results i
 
 ## Screenshots
 ### Main Screen
-![Main Screen](https://i.imgur.com/wFSral2.png)
+<img src=https://i.imgur.com/wFSral2.png width=300>
 
 ### Search Screen
-![Search Screen](https://i.imgur.com/24jXCAp.png)
+<img src=https://i.imgur.com/24jXCAp.png width=300>
 
 ### Favorites Screen
-![Favorites Screen](https://i.imgur.com/05rPSNo.png)
+<img src=https://i.imgur.com/05rPSNo.png width=300>
 
 ### Add Console
-![Add Console](https://i.imgur.com/SC1fNsr.png)
-![Add Console Windows](https://i.imgur.com/Ga7h9RT.png)
+<img src=https://i.imgur.com/SC1fNsr.png width=500>
+<img src=https://i.imgur.com/Ga7h9RT.png width=500>
 
 ### Add Roms
-![Add Roms](https://i.imgur.com/CorLrO5.png)
-![Add Roms Windows](https://i.imgur.com/vThyqeW.png)
+<img src=https://i.imgur.com/CorLrO5.png width=500>
+<img src=https://i.imgur.com/vThyqeW.png width=500>
 
 
 ## TODO:
