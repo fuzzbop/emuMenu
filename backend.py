@@ -71,9 +71,7 @@ def launch(console, rom):
 
 	elif "<BASENAME>" in command:
 
-			base_name = os.path.basename(rom_full_path)
-			base_name = base_name.split(".")
-			command = command.replace("<BASENAME>", base_name[0])
+			command = command.replace("<BASENAME>", full_rom_path(console, rom))
 	else:
 
 		print("Command Not Launchable")
