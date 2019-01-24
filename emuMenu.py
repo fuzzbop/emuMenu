@@ -349,13 +349,18 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 			purge_action = menu.addAction("Purge Roms")
 			edit_command = menu.addAction("Change Launch Command")
 			custom_rom = menu.addAction("Launch Custom Rom")
+			remove = menu.addAction("Remove Console")
+
 			if menu.exec_(event.globalPos()) == purge_action:
 				self.purge_console_roms()
 			elif menu.exec_(event.globalPos())== edit_command:
 				self.open_edit_command()
 			elif menu.exec_(event.globalPos()) == custom_rom:
-				self.open_custom_rom()	
-			return True
+				self.open_custom_rom()
+			elif menu.exec_(event.globalPos()) == remove:
+				self.remove_console()
+				self.generate_console_list()
+
 		elif (event.type() == QtCore.QEvent.ContextMenu and source is self.rom_list_widget):
 			menu = QtWidgets.QMenu(self)
 			add_favorite = menu.addAction("Add Rom To Favorites")
@@ -363,6 +368,10 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 				self.add_to_favorites()
 					
 		return super(emuMenu, self).eventFilter(source, event)
+	
+	def remove_console(self):
+		backend.remove_console(self.console_list_widget.currentItem().text())
+
 	def open_custom_rom(self):
 		# Opens specified rom 
 		

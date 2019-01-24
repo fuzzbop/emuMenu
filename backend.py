@@ -254,6 +254,15 @@ def remove_favorite(console, rom):
 		cursor = db.cursor()
 		cursor.execute("DELETE FROM favorites WHERE console=? AND pretty_name=?", (console, rom))
 		
+def remove_console(console):
+		# Remove rom from favorites database table.
+		
+	with db:
+		
+		cursor = db.cursor()
+		cursor.execute("DELETE FROM consoles WHERE name=?", (console,))
+		cursor.execute("DROP TABLE '" + console + "'")
+		
 def edit_console_command(console, command):
 	# edits command for specified console with specified command.
 
