@@ -99,7 +99,7 @@ def add_console(name, command):
 		cursor.execute("CREATE TABLE IF NOT EXISTS '" + name + "' (name TEXT, location TEXT, pretty_name TEXT, UNIQUE(name, location, pretty_name))")
 		
 def add_games_directory(console, directory, extension):
-	# Adds games from a directory with a given extension to a consoles game table after checking if it exists.
+	# Adds games from a directory with a given extension to a consoles game table.
 
 	progress(1)
 	counter = 0
@@ -118,7 +118,7 @@ def add_games_directory(console, directory, extension):
 	progress(100)
 	
 def add_games_hash(console, filename):
-	# Adds games from MAME Softlist Hash file after checking is it exists
+	# Adds games from MAME Softlist Hash file.
 
 	progress(0)
 	counter = 0
@@ -138,7 +138,7 @@ def add_games_hash(console, filename):
 	progress(100)
 	
 def add_games_files(console, text_file=" ", verify_file=" "):
-    # Adds games from verify file after checking if it exists, uses text file to get pretty name (written for MAME -listall)
+    # Adds games from verify file, uses text file to get pretty name (written for MAME -listall).
 
 	progress(1)
 	counter = 0
@@ -177,7 +177,7 @@ def add_games_files(console, text_file=" ", verify_file=" "):
 	progress(100)
 	
 def add_games_execute(console, list):
-	# Actual SQL call for the above functions
+	# Actual SQL call for the above functions.
 
 	with db:
 		cursor = db.cursor()
@@ -199,14 +199,14 @@ def add_favorite(console, rom):
 		cursor.execute("INSERT OR IGNORE INTO favorites VALUES(?,?,?)", (rom, location, console))
 
 def remove_favorite(console, rom):
-		# Remove rom from favorites database table.
+	# Remove rom from favorites database table.
 		
 	with db:
 		cursor = db.cursor()
 		cursor.execute("DELETE FROM favorites WHERE console=? AND pretty_name=?", (console, rom))
 		
 def remove_console(console):
-		# Remove rom from favorites database table.
+	# Remove rom from favorites database table.
 		
 	with db:
 		cursor = db.cursor()
@@ -214,7 +214,7 @@ def remove_console(console):
 		cursor.execute("DROP TABLE '" + console + "'")
 		
 def edit_console_command(console, command):
-	# edits command for specified console with specified command.
+	# Edits command for specified console with specified command.
 
 	with db:
 		cursor = db.cursor()
@@ -233,7 +233,7 @@ def table_length(table):
 		return cursor.fetchall()[0][0]
 
 def console_list():
-	# Returns all consoles in the database
+	# Returns all consoles in the database.
 
 	with db:
 		cursor = db.cursor()
@@ -249,7 +249,7 @@ def console_command(console):
 		return cursor.fetchall()[0][0]
 		
 def full_rom_path(console, rom):
-	# Returns full rom path for supplied rom for supplied console
+	# Returns full rom path for supplied rom for supplied console.
 
 	with db:
 		cursor = db.cursor()
@@ -257,7 +257,7 @@ def full_rom_path(console, rom):
 		return cursor.fetchall()[0][0]
 
 def rom_list(console):
-	# Returns list of roms in supplied console's table
+	# Returns list of roms in supplied console's table.
 
 	with db:
 		cursor = db.cursor()
@@ -265,7 +265,7 @@ def rom_list(console):
 		return cursor.fetchall()
 		
 def rom_location_list(console):
-	# Returns list of roms by location for checking if roms allready in list
+	# Returns list of roms by location for checking if roms allready in list.
 
 	with db:
 		cursor = db.cursor()
@@ -273,7 +273,7 @@ def rom_location_list(console):
 		return cursor.fetchall()
 		
 def rom_name_list(console):
-	# Returns list of roms in supplied console's table
+	# Returns list of roms in supplied console's table.
 
 	with db:
 		cursor = db.cursor()
@@ -281,7 +281,7 @@ def rom_name_list(console):
 		return cursor.fetchall()
 		
 def favorite_console_list():
-	# Generate list of consoles in favorites database
+	# Generate list of consoles in favorites database.
 
 	with db:
 		cursor = db.cursor()
@@ -289,7 +289,7 @@ def favorite_console_list():
 		return cursor.fetchall()
 
 def favorite_rom_list(console):
-	# Generates full rom list from favorites database
+	# Generates full rom list from favorites database.
 	
 	with db:
 		cursor = db.cursor()
