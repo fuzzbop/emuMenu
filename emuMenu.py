@@ -148,7 +148,7 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 			add_thread.start()
 			while add_thread.is_alive():
 				self.add_roms_progress.setValue(backend.progress.percentage)
-		if ((self.directory_checkbox.isChecked() and self.extension_checkbox.isChecked() and self.hash_checkbox.isChecked())
+		elif ((self.directory_checkbox.isChecked() and self.extension_checkbox.isChecked() and self.hash_checkbox.isChecked())
 			and not (self.verify_checkbox.isChecked()
 			or self.listfull_checkbox.isChecked()
 			or self.custom_checkbox.isChecked()

@@ -40,8 +40,9 @@ A default database will be created when you first open the program.
 * \<BASENAME\> Example: `mame <BASENAME>`
 
 After you add your console, you need to add some roms. There are currently three implemented ways to do this with the Add Roms menu item.
+* If you check Playlist, you provide a Retroarch Playlist .lpl file.
 * If you check Hash, you provide the hash file for the MAME softlist (currently adds full list, dosent check for avaliablity).
-* If you check Directory and Extension, you provide a directory with the open button, and type in your extension (without the .).
+* If you check Directory and Extension, you provide a directory with the open button, and type in your extension (without the .). Can also check Hash and provide a MAME Hash for pretty names!
 * If you check listfull and either verify or custom: You provide the output of mame -listfull to listfull, the output of mame -verify or a custom list of roms (In the style of MFM, so a basename for each mame rom you would like on each line of the txt file.)
 
 The -listfull and -verify option takes quite a while to run (around 20 min)
