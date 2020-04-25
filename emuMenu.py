@@ -86,6 +86,7 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 		self.listfull_button.clicked.connect(self.select_listfull)
 		self.verify_button.clicked.connect(self.select_verify)
 		self.custom_button.clicked.connect(self.select_mame_custom)
+		self.playlist_button.clicked.connect(self.select_playlist)
 
 	def generate_combo_box(self):
 		# Generates console list for combo box.
@@ -104,6 +105,10 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 	def select_hash(self):
 		hash_location = QtWidgets.QFileDialog.getOpenFileName()
 		self.hash_line_edit.setText(hash_location[0])
+	
+	def select_playlist(self):
+		playlist_location = QtWidgets.QFileDialog.getOpenFileName()
+		self.playlist_line_edit.setText(playlist_location[0])
 
 	def select_listfull(self):
 		listfull = QtWidgets.QFileDialog.getOpenFileName()
@@ -132,18 +137,41 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 		listfull_file = self.listfull_line_edit.text()
 		verify_file = self.verify_line_edit.text()
 		mame_custom_file = self.custom_line_edit.text()
+		playlist_file = self.playlist_line_edit.text()
 		if ((self.directory_checkbox.isChecked() and self.extension_checkbox.isChecked())
 			and not (self.hash_checkbox.isChecked()
 			or self.listfull_checkbox.isChecked()
 			or self.custom_checkbox.isChecked()
+			or self.playlist_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
 			add_thread = Thread(target = backend.add_games_directory, args = (console, directory, extension))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
+		if ((self.directory_checkbox.isChecked() and self.extension_checkbox.isChecked() and self.hash_checkbox.isChecked())
+			and not (self.verify_checkbox.isChecked()
+			or self.listfull_checkbox.isChecked()
+			or self.custom_checkbox.isChecked()
+			or self.playlist_checkbox.isChecked())):
+			add_thread = Thread(target = backend.add_games_directory_hash, args = (console, directory, extension, hash_file))
+			add_thread.start()
+			while add_thread.is_alive():
+				self.add_roms_progress.setValue(backend.progress.percentage)
+		elif (self.playlist_checkbox.isChecked()
+			and not (self.hash_checkbox.isChecked()
+			or self.extension_checkbox.isChecked()
+			or self.listfull_checkbox.isChecked()
+			or self.verify_checkbox.isChecked()
+			or self.custom_checkbox.isChecked()
+			or self.directory_checkbox.isChecked())):
+			add_thread = Thread(target = backend.add_games_playlist, args = (console, playlist_file))
 			add_thread.start()
 			while add_thread.is_alive():
 				self.add_roms_progress.setValue(backend.progress.percentage)
 		elif (self.hash_checkbox.isChecked()
 			and not (self.directory_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
+			or self.playlist_checkbox.isChecked()
 			or self.listfull_checkbox.isChecked()
 			or self.custom_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
@@ -154,6 +182,7 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 		elif ((self.listfull_checkbox.isChecked() and self.verify_checkbox.isChecked())
 			and not (self.hash_checkbox.isChecked()
 			or self.directory_checkbox.isChecked()
+			or self.playlist_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
 			or self.custom_checkbox.isChecked())):
 			add_thread = Thread(target = backend.add_games_files, args = (console, listfull_file, verify_file))
@@ -163,6 +192,7 @@ class add_roms(QtWidgets.QDialog, addRomDialog.Ui_add_rom_dialog):
 		elif ((self.listfull_checkbox.isChecked() and self.custom_checkbox.isChecked())
 			and not (self.hash_checkbox.isChecked()
 			or self.directory_checkbox.isChecked()
+			or self.playlist_checkbox.isChecked()
 			or self.extension_checkbox.isChecked()
 			or self.verify_checkbox.isChecked())):
 			add_thread = Thread(target = backend.add_games_files, args = (console, listfull_file, mame_custom_file))

@@ -7,26 +7,27 @@
     <x>0</x>
     <y>0</y>
     <width>1108</width>
-    <height>374</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Add Roms From Directory</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="description_label">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
+   <item row="3" column="0">
+    <widget class="QDialogButtonBox" name="rom_add_button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="text">
-      <string>Add roms based on choices below. Some are required together (Directory and Extension)</string>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QProgressBar" name="add_roms_progress">
+     <property name="value">
+      <number>0</number>
      </property>
     </widget>
    </item>
@@ -78,6 +79,39 @@
            <width>16777215</width>
            <height>35</height>
           </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="playlist_layout">
+       <item>
+        <widget class="QCheckBox" name="playlist_checkbox">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Playlist:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="playlist_line_edit"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="playlist_button">
+         <property name="text">
+          <string>Open</string>
          </property>
         </widget>
        </item>
@@ -286,20 +320,19 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
-    <widget class="QDialogButtonBox" name="rom_add_button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="0">
+    <widget class="QLabel" name="description_label">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>30</height>
+      </size>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="text">
+      <string>Add roms based on choices below. Some are required together (Directory and Extension)</string>
      </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QProgressBar" name="add_roms_progress">
-     <property name="value">
-      <number>0</number>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

@@ -24,6 +24,7 @@ import math
 import pathlib
 import random
 import re
+import json
 
 pathlib.Path.mkdir(pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu"), parents=True, exist_ok=True)
 working_dir = pathlib.PurePath.joinpath(pathlib.Path.home(), ".config/emuMenu")
@@ -33,7 +34,7 @@ db = lite.connect(pathlib.PurePath.joinpath(working_dir, "games.db"), check_same
 
 def update_txt(console, rom):
 	# Create and/or populate text file with game being launched
-	
+
 	current_game = open(pathlib.PurePath.joinpath(working_dir, "now_playing.txt"), "w+")
 	current_game.truncate()
 	current_game.write("Now Playing: " + rom + " on " + console + " \r\n")
@@ -44,10 +45,7 @@ def launch(console, rom):
 
 	command = console_command(console)
 
-	if os.sep in rom:
-		rom_full_path = rom
-	else:
-		rom_full_path = full_rom_path(console, rom)
+	rom_full_path = full_rom_path(console, rom)
 	update_txt(console, rom)
 
 	if "<ROM>" in command:
@@ -65,17 +63,17 @@ def launch(console, rom):
 
 def launch_random():
 	# Launches a random game from a random console.
-	
+
 	consoles = console_list()
 	random_number = random.SystemRandom()
 	random_console = consoles[random_number.randint(0,len(consoles)-1)][0]
 	roms = rom_list(random_console)
 	random_rom = roms[random_number.randint(0,len(roms)-1)][0]
 	launch(random_console, random_rom)
-	
+
 def progress(value):
 	# Simply holds a percentage variable so it can be called to update GUI progress bars
-	
+
 	progress.percentage=value
 
 
@@ -97,7 +95,7 @@ def add_console(name, command):
 		cursor = db.cursor()
 		cursor.execute("INSERT OR IGNORE INTO consoles VALUES(?,?)", (name, command))
 		cursor.execute("CREATE TABLE IF NOT EXISTS '" + name + "' (name TEXT, location TEXT, pretty_name TEXT, UNIQUE(name, location, pretty_name))")
-		
+
 def add_games_directory(console, directory, extension):
 	# Adds games from a directory with a given extension to a consoles game table.
 
@@ -117,6 +115,34 @@ def add_games_directory(console, directory, extension):
 	add_games_execute(console, to_insert)
 	progress(100)
 	
+def add_games_directory_hash(console, directory, extension, filename):
+	#Adds Games from directory with given consoles game table with MAME softlist hash file for pretty name
+	
+	progress(1)
+	counter = 0
+	emu = console_command(console)
+	length = len(list(glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True)))
+	to_insert = [ ]
+	tree = et.parse(filename)
+	root = tree.getroot()
+	dictionary={ }
+
+	for software in root.findall("software"):
+		dictname = software.get("name")
+		dictpretty = software.find("description").text
+		dictionary[dictname] = [dictpretty]
+
+	for filename in glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True):
+		counter += 1
+		progress((math.trunc(counter/length*100))-1)
+		name = filename[:-(len(extension) + 1)]
+		name = os.path.basename(name)
+		location = filename
+		pretty = dictionary[name][0]
+		to_insert.append((name, location, pretty))
+	add_games_execute(console, to_insert)
+	progress(100)
+	
 def add_games_hash(console, filename):
 	# Adds games from MAME Softlist Hash file.
 
@@ -126,23 +152,37 @@ def add_games_hash(console, filename):
 	root = tree.getroot()
 	length = len(root.findall("software"))
 	to_insert=[ ]
-	
+
 	for software in root.findall("software"):
 		counter += 1
 		progress((math.trunc(counter/length*100))-1)
 		name = software.get("name")
 		pretty_name = software.find("description").text
 		to_insert.append((name, name, pretty_name))
+
+	add_games_execute(console, to_insert)
+	progress(100)
+
+def add_games_playlist(console, filename):
+	progress(0)
+	counter = 0
+	to_insert=[ ]
+	with open(filename) as f:
+		jsondata = json.load(f)
+	for i in range(len(jsondata['items'])):
+		counter += 1
+		progress((math.trunc(counter/len(jsondata['items'])*100))-1)
+		to_insert.append((jsondata["items"][i]["label"], jsondata["items"][i]["path"], jsondata["items"][i]["label"]))
 	
 	add_games_execute(console, to_insert)
 	progress(100)
-	
+
 def add_games_files(console, text_file=" ", verify_file=" "):
     # Adds games from verify file, uses text file to get pretty name (written for MAME -listall).
 
 	progress(1)
 	counter = 0
-	
+
 	games = { }
 	verified = [ ]
 
@@ -158,38 +198,38 @@ def add_games_files(console, text_file=" ", verify_file=" "):
 					pretty = result.group(0)
 					games[name] = (name, name, pretty)
 		input_file.close()
-		
+
 	length = len(games)
-	verify = re.compile('(?<=romset\\s)[^\\s]*(?=.*(good|best).*)')        
+	verify = re.compile('(?<=romset\\s)[^\\s]*(?=.*(good|best).*)')
 	with open(verify_file) as input_file:
 		for line in input_file:
-			counter += 1           
+			counter += 1
 			progress((math.trunc(counter/length*100))-1)
-			result = verify.search(line)        
+			result = verify.search(line)
 			if result:
 				name = result.group(0)
 				entry = games[name]
 				if entry:
 					verified.append((entry[0], entry[1], entry[2]))
 		input_file.close()
-	
+
 	add_games_execute(console, verified)
 	progress(100)
-	
+
 def add_games_execute(console, list):
 	# Actual SQL call for the above functions.
 
 	with db:
 		cursor = db.cursor()
 		cursor.executemany("INSERT OR IGNORE INTO '" + console + "' VALUES(?,?,?)", list)
-		
+
 def clear_roms(console):
 	# Removes all enrties for a selected console.
 
 	with db:
 		cursor = db.cursor()
 		cursor.execute("DELETE FROM '" + console + "'")
-		
+
 def add_favorite(console, rom):
 	# Adds rom to favorites database table.
 
@@ -200,19 +240,19 @@ def add_favorite(console, rom):
 
 def remove_favorite(console, rom):
 	# Remove rom from favorites database table.
-		
+
 	with db:
 		cursor = db.cursor()
 		cursor.execute("DELETE FROM favorites WHERE console=? AND pretty_name=?", (console, rom))
-		
+
 def remove_console(console):
 	# Remove rom from favorites database table.
-		
+
 	with db:
 		cursor = db.cursor()
 		cursor.execute("DELETE FROM consoles WHERE name=?", (console,))
 		cursor.execute("DROP TABLE '" + console + "'")
-		
+
 def edit_console_command(console, command):
 	# Edits command for specified console with specified command.
 
@@ -221,7 +261,7 @@ def edit_console_command(console, command):
 		cursor.execute("UPDATE consoles SET command= ? WHERE name = ?", (command, console))
 
 
-# Database Queries 		
+# Database Queries
 
 
 def table_length(table):
@@ -239,7 +279,7 @@ def console_list():
 		cursor = db.cursor()
 		cursor.execute("SELECT name FROM consoles ORDER BY name")
 		return cursor.fetchall()
-		
+
 def console_command(console):
 	# Returns command for specified console.
 
@@ -247,7 +287,7 @@ def console_command(console):
 		cursor = db.cursor()
 		cursor.execute("SELECT command FROM consoles WHERE name IS '" + console + "'")
 		return cursor.fetchall()[0][0]
-		
+
 def full_rom_path(console, rom):
 	# Returns full rom path for supplied rom for supplied console.
 
@@ -263,7 +303,7 @@ def rom_list(console):
 		cursor = db.cursor()
 		cursor.execute("SELECT pretty_name FROM '" + console + "' ORDER BY pretty_name COLLATE NOCASE ASC")
 		return cursor.fetchall()
-		
+
 def rom_location_list(console):
 	# Returns list of roms by location for checking if roms allready in list.
 
@@ -271,7 +311,7 @@ def rom_location_list(console):
 		cursor = db.cursor()
 		cursor.execute("SELECT location FROM '" + console + "' ORDER BY location")
 		return cursor.fetchall()
-		
+
 def rom_name_list(console):
 	# Returns list of roms in supplied console's table.
 
@@ -279,7 +319,7 @@ def rom_name_list(console):
 		cursor = db.cursor()
 		cursor.execute("SELECT name FROM '" + console + "'")
 		return cursor.fetchall()
-		
+
 def favorite_console_list():
 	# Generate list of consoles in favorites database.
 
@@ -290,22 +330,22 @@ def favorite_console_list():
 
 def favorite_rom_list(console):
 	# Generates full rom list from favorites database.
-	
+
 	with db:
 		cursor = db.cursor()
 		cursor.execute("SELECT pretty_name FROM favorites WHERE console='" + console +"' ORDER BY pretty_name")
 		return cursor.fetchall()
-		
+
 def search_roms(search):
 	# Searches rom names in database for search term provided.
-	
+
 	with db:
 		cursor = db.cursor()
 		cursor.execute("SELECT name FROM sqlite_master WHERE type='table'" )
 		console_list = cursor.fetchall()
 		results = []
-		
-		for test in range(len(console_list)):		
+
+		for test in range(len(console_list)):
 			if "consoles" not in console_list[test][0]:
 				cursor.execute("SELECT pretty_name FROM '" + console_list[test][0] + "' WHERE pretty_name LIKE ?", ("%" + search + "%",))
 				raw_results = cursor.fetchall()

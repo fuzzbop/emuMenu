@@ -2,23 +2,29 @@
 
 # Form implementation generated from reading ui file 'assets/addRomDialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_add_rom_dialog(object):
     def setupUi(self, add_rom_dialog):
         add_rom_dialog.setObjectName("add_rom_dialog")
-        add_rom_dialog.resize(1108, 374)
+        add_rom_dialog.resize(1108, 443)
         self.gridLayout = QtWidgets.QGridLayout(add_rom_dialog)
         self.gridLayout.setObjectName("gridLayout")
-        self.description_label = QtWidgets.QLabel(add_rom_dialog)
-        self.description_label.setMaximumSize(QtCore.QSize(16777215, 30))
-        self.description_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.description_label.setObjectName("description_label")
-        self.gridLayout.addWidget(self.description_label, 0, 0, 1, 1)
+        self.rom_add_button_box = QtWidgets.QDialogButtonBox(add_rom_dialog)
+        self.rom_add_button_box.setOrientation(QtCore.Qt.Horizontal)
+        self.rom_add_button_box.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.rom_add_button_box.setObjectName("rom_add_button_box")
+        self.gridLayout.addWidget(self.rom_add_button_box, 3, 0, 1, 1)
+        self.add_roms_progress = QtWidgets.QProgressBar(add_rom_dialog)
+        self.add_roms_progress.setProperty("value", 0)
+        self.add_roms_progress.setObjectName("add_roms_progress")
+        self.gridLayout.addWidget(self.add_roms_progress, 4, 0, 1, 1)
         self.main_layout = QtWidgets.QVBoxLayout()
         self.main_layout.setSpacing(5)
         self.main_layout.setObjectName("main_layout")
@@ -38,6 +44,20 @@ class Ui_add_rom_dialog(object):
         self.console_name_combo.setObjectName("console_name_combo")
         self.console_layout.addWidget(self.console_name_combo)
         self.main_layout.addLayout(self.console_layout)
+        self.playlist_layout = QtWidgets.QHBoxLayout()
+        self.playlist_layout.setObjectName("playlist_layout")
+        self.playlist_checkbox = QtWidgets.QCheckBox(add_rom_dialog)
+        self.playlist_checkbox.setMinimumSize(QtCore.QSize(200, 35))
+        self.playlist_checkbox.setMaximumSize(QtCore.QSize(200, 35))
+        self.playlist_checkbox.setObjectName("playlist_checkbox")
+        self.playlist_layout.addWidget(self.playlist_checkbox)
+        self.playlist_line_edit = QtWidgets.QLineEdit(add_rom_dialog)
+        self.playlist_line_edit.setObjectName("playlist_line_edit")
+        self.playlist_layout.addWidget(self.playlist_line_edit)
+        self.playlist_button = QtWidgets.QPushButton(add_rom_dialog)
+        self.playlist_button.setObjectName("playlist_button")
+        self.playlist_layout.addWidget(self.playlist_button)
+        self.main_layout.addLayout(self.playlist_layout)
         self.hash_layout = QtWidgets.QHBoxLayout()
         self.hash_layout.setObjectName("hash_layout")
         self.hash_checkbox = QtWidgets.QCheckBox(add_rom_dialog)
@@ -123,15 +143,11 @@ class Ui_add_rom_dialog(object):
         self.extension_layout.addWidget(self.extension_line_edit)
         self.main_layout.addLayout(self.extension_layout)
         self.gridLayout.addLayout(self.main_layout, 1, 0, 1, 1)
-        self.rom_add_button_box = QtWidgets.QDialogButtonBox(add_rom_dialog)
-        self.rom_add_button_box.setOrientation(QtCore.Qt.Horizontal)
-        self.rom_add_button_box.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.rom_add_button_box.setObjectName("rom_add_button_box")
-        self.gridLayout.addWidget(self.rom_add_button_box, 3, 0, 1, 1)
-        self.add_roms_progress = QtWidgets.QProgressBar(add_rom_dialog)
-        self.add_roms_progress.setProperty("value", 0)
-        self.add_roms_progress.setObjectName("add_roms_progress")
-        self.gridLayout.addWidget(self.add_roms_progress, 4, 0, 1, 1)
+        self.description_label = QtWidgets.QLabel(add_rom_dialog)
+        self.description_label.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.description_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.description_label.setObjectName("description_label")
+        self.gridLayout.addWidget(self.description_label, 0, 0, 1, 1)
 
         self.retranslateUi(add_rom_dialog)
         self.rom_add_button_box.accepted.connect(add_rom_dialog.accept)
@@ -141,8 +157,9 @@ class Ui_add_rom_dialog(object):
     def retranslateUi(self, add_rom_dialog):
         _translate = QtCore.QCoreApplication.translate
         add_rom_dialog.setWindowTitle(_translate("add_rom_dialog", "Add Roms From Directory"))
-        self.description_label.setText(_translate("add_rom_dialog", "Add roms based on choices below. Some are required together (Directory and Extension)"))
         self.console_name_label.setText(_translate("add_rom_dialog", "Console Name: "))
+        self.playlist_checkbox.setText(_translate("add_rom_dialog", "Playlist:"))
+        self.playlist_button.setText(_translate("add_rom_dialog", "Open"))
         self.hash_checkbox.setText(_translate("add_rom_dialog", "Softlist Hash:"))
         self.hash_button.setText(_translate("add_rom_dialog", "Open"))
         self.listfull_checkbox.setText(_translate("add_rom_dialog", "MAME -listfull:"))
@@ -154,4 +171,4 @@ class Ui_add_rom_dialog(object):
         self.directory_checkbox.setText(_translate("add_rom_dialog", "Directory:"))
         self.directory_button.setText(_translate("add_rom_dialog", "Open"))
         self.extension_checkbox.setText(_translate("add_rom_dialog", "Extension:"))
-
+        self.description_label.setText(_translate("add_rom_dialog", "Add roms based on choices below. Some are required together (Directory and Extension)"))
