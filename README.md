@@ -39,13 +39,13 @@ A default database will be created when you first open the program.
 * \<ROM\> Example: `retroarch -L /path/to/core.so <ROM>`
 * \<BASENAME\> Example: `mame <BASENAME>`
 
-After you add your console, you need to add some roms. There are currently three implemented ways to do this with the Add Roms menu item.
+After you add your console, you need to add some roms. There are currently four implemented ways to do this with the Add Roms menu item.
 * If you check Playlist, you provide a Retroarch Playlist .lpl file.
 * If you check Hash, you provide the hash file for the MAME softlist (currently adds full list, dosent check for avaliablity).
 * If you check Directory and Extension, you provide a directory with the open button, and type in your extension (without the .). Can also check Hash and provide a MAME Hash for pretty names!
 * If you check listfull and either verify or custom: You provide the output of mame -listfull to listfull, the output of mame -verify or a custom list of roms (In the style of MFM, so a basename for each mame rom you would like on each line of the txt file.)
 
-The -listfull and -verify option takes quite a while to run (around 20 min)
+The -listfull and -verify option takes longer than the others to run
 Now you will have a list of consoles on the left pane and roms on the right pane. These are all generated on the fly.
 
 You can purge roms for a console by right clicking the console and selecting purge roms. You can edit the console's command as well.
