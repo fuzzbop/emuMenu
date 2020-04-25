@@ -373,6 +373,10 @@ class emuMenu(QtWidgets.QMainWindow, emuMenuMainWindow.Ui_emumenu_main_window):
 		rom = self.rom_list_widget.currentItem().text()
 		backend.launch(console, rom)
 
+	def keyPressEvent(self, event):
+		if event.key() == QtCore.Qt.Key_Return:
+			self.launch_rom()
+			
 	def eventFilter(self, source, event):
 		if (event.type() == QtCore.QEvent.ContextMenu and source is self.console_list_widget):
 			menu = QtWidgets.QMenu()
