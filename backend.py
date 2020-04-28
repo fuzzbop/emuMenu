@@ -140,9 +140,16 @@ def add_games_directory_hash(console, directory, extension, filename):
 		location = filename
 		purepath = pathlib.PurePath(filename)
 		if extension == "chd":
-			pretty = dictionary[purepath.parts[len(purepath.parts)-2]][0]
+			if list(dictionary.keys()).count(purepath.parts[len(purepath.parts)-2]) > 0:
+				pretty = dictionary[purepath.parts[len(purepath.parts)-2]][0]
+			else:
+				pretty = name
 		else:
-			pretty = dictionary[name][0]
+			if name in dictionary:
+				pretty = dictionary[name][0]
+			else:
+				pretty = name
+		
 		to_insert.append((name, location, pretty))
 	add_games_execute(console, to_insert)
 	progress(100)
