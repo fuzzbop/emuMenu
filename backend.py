@@ -102,7 +102,7 @@ def add_games_directory(console, directory, extension):
 	progress(1)
 	counter = 0
 	emu = console_command(console)
-	directory = globe.escape(directory)
+	directory = glob.escape(directory)
 	length = len(list(glob.iglob(str(pathlib.Path(directory)) + os.sep +'**/*' + extension, recursive=True)))
 	to_insert = [ ]
 
